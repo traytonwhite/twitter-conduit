@@ -1,5 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 
+module Main where
+
 import Web.Twitter.Conduit
 import Web.Twitter.Types.Lens
 import Common
@@ -15,14 +17,16 @@ import qualified Data.Conduit.List as CL
 import qualified Data.Text as T
 import qualified Data.Text.IO as T
 import Network.HTTP.Conduit as HTTP
+import System.Environment
 
 main :: IO ()
 main = do
-    [keyword] < - getArgs
+    [keyword] <- getArgs
 
     twInfo <- getTWInfoFromEnv
+
     withManager $ \mgr -> do
-        src <- stream twInfo mgr $ search $ T.pack keyword
+        src <- stream twInfo mgr $ statusesFilterByTrack $ T.pack keyword
         src C.$$+- CL.mapM_ (liftIO . printTL)
 
 printTL :: StreamingAPI -> IO ()
