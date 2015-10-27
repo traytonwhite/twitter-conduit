@@ -223,6 +223,39 @@ executable userstream
   else
     build-depends: network < 2.6
 
+executable search
+  main-is: search.hs
+  hs-source-dirs: sample/
+
+  if !flag(build-samples)
+    buildable: False
+  else
+    build-depends:
+        base >= 4.5 && < 5
+      , containers
+      , transformers-base
+      , transformers
+      , monad-control
+      , bytestring
+      , text
+      , case-insensitive
+      , lens
+      , aeson
+      , data-default
+      , resourcet
+      , conduit
+      , conduit-extra
+      , http-conduit
+      , authenticate-oauth
+      , twitter-conduit
+      , twitter-types
+      , twitter-types-lens
+
+  if flag(network-uri)
+    build-depends: network-uri >= 2.6
+  else
+    build-depends: network < 2.6
+
 executable oauth_callback
   main-is: oauth_callback.hs
   hs-source-dirs: sample/
